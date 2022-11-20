@@ -1,5 +1,5 @@
 {
-  "name": "google-oauth2-test",
+  "name": "url-shortener",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -17,11 +17,10 @@
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-rate-limit": "^6.7.0",
-    "express-session": "^1.17.3",
     "passport": "^0.5.3",
+    "passport-discord": "^0.1.4",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-    "url": "^0.11.0",
     "wio.db": "^4.0.22"
   }
 }

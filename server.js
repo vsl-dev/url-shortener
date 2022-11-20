@@ -4,7 +4,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const url = require("url");
 const ejs = require("ejs");
 const path = require("path");
 require("./passport-setup");
@@ -31,42 +30,23 @@ app.use(
     maxAge: 120 * 60 * 60 * 1000,
   })
 );
-const isLoggedIn = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/user", (req, res) => {
-  res.send(req.user);
-});
-
-app.get(
-  "/login",
-  (req, res, next) => {
-    if (req.session.backURL) {
-      req.session.backURL = req.session.backURL;
-    } else if (req.query.r) {
-      const url = req.query.r;
-      req.session.backURL = url;
-    } else if (req.headers.referer) {
-      const parsed = url.parse(req.headers.referer).pathname;
-      req.session.backURL = parsed;
-    } else {
-      req.session.backURL = "/";
-    }
-    next();
-  },
-  (req, res) => {
+app.get("/login/:type", (req, res) => {
+  const type = req.params.type;
+  if (type === "discord") {
+    res.redirect("/auth/discord");
+  } else if (type === "google") {
+    res.redirect("/auth/google");
+  } else {
     res.redirect("/auth/google");
   }
-);
+});
 
 app.get("/auth/failed", (req, res) => res.send("You Failed to log in!"));
+
+// Google auth
 
 app.get(
   "/auth/google",
@@ -75,10 +55,28 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/auth/failed" }),
+  passport.authenticate(["google", "discord"], {
+    failureRedirect: "/auth/failed",
+  }),
   function (req, res) {
     console.log(req.user);
-    res.redirect(req.session.backURL || "/");
+    res.redirect("/");
+  }
+);
+
+// Discord Auth
+
+app.get(
+  "/auth/discord",
+  passport.authenticate("discord", { scope: ["identify", "email"] })
+);
+
+app.get(
+  "/auth/discord/callback",
+  passport.authenticate("discord", { failureRedirect: "/auth/failed" }),
+  function (req, res) {
+    console.log(req.user);
+    res.redirect("/");
   }
 );
 
