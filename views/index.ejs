@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('parts/head') %>
+  <body class="bg-gray-800">
+    <div class="flex justify-center items-center h-screen">
+      <% if(user) { %>
+      <div>
+        <div>
+          <form id="form">
+            <input
+              name="url"
+              id="input"
+              type="url"
+              placeholder="Url"
+              max="100"
+              min="5"
+            />
+            <input
+              class="hidden"
+              name="customId"
+              id="customId"
+              type="text"
+              placeholder="custom path"
+              max="50"
+              min="5"
+            />
+            <select name="type" id="type">
+              <option value="random">Random</option>
+              <option value="custom">Custom</option>
+            </select>
+            <button id="submit" type="submit">Submit</button>
+          </form>
+        </div>
+        <div>
+          <h2>Your Links</h2>
+          <div id="list">
+            <center><p class="text-2xl text-white fa-solid fa-spinner fa-spin" id="loading"></p></center>
+          </div>
+        </div>
+      </div>
+      <% } else { %>
+      <div
+        onclick="window.location.href = '/login'"
+        class="flex gap-2 items-center bg-green-300 rounded-lg p-2 cursor-pointer hover:scale-150"
+      >
+        <img
+          width="38"
+          src="https://cdn.vsldev.tk/images/O9NkXXPLcZqGmNyFy4fM.svg"
+        />
+        <p class="text-lg">Login With Google</p>
+      </div>
+      <% } %>
+    </div>
+
+    <script>
+      const btn = document.getElementById("submit");
+      const input = document.getElementById("input");
+      const type = document.getElementById("type");
+      const form = document.getElementById("form");
+      const customId = document.getElementById("customId");
+
+      function refreshList() {
+        fetch("/api/mylinks", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var array = data.data;
+            if (array == null) {
+              document.getElementById("list").innerHTML = "";
+              const a = document.createElement("p");
+              const aText = document.createTextNode(
+                "You don't have any shortened links"
+              );
+              a.appendChild(aText);
+
+              const element = document.getElementById("list");
+              element.appendChild(a);
+            } else {
+              document.getElementById("list").innerHTML = "";
+              array.reverse().map((x) => {
+                const a = document.createElement("div");
+                const b = document.createElement("div");
+                const icon = document.createElement("div");
+                const bText = document.createTextNode(x.url);
+                a.classList.add("flex", "flex-row", 'justify-between', 'items-center', "text-green-300", "p-px", 'gap-2');
+                b.classList.add('text-gray-800', 'bg-white', 'border-white', 'p-px', 'rounded-lg', 'w-full')
+                icon.classList.add("fa-solid", "fa-pen", 'text-gray-800', 'bg-white', 'p-2', 'rounded-lg', 'cursor-pointer');
+                a.appendChild(b);
+                a.appendChild(icon);
+                b.appendChild(bText);
+
+                const element = document.getElementById("list");
+                element.appendChild(a);
+              });
+            }
+          });
+      }
+
+      type.onchange = () => {
+        var hidden = customId.className;
+        if (hidden === "hidden") {
+          customId.className = "block";
+        } else {
+          customId.className = "hidden";
+        }
+      };
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        var json = {
+          url: formData.get("url"),
+          type: formData.get("type"),
+          customId: formData.get("customId") ?? null,
+        };
+
+        console.log(json);
+
+        fetch("/api/short", {
+          method: "POST",
+          body: JSON.stringify(json),
+          headers: {
+            "content-type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            refreshList();
+          });
+      });
+
+      window.onload = () => {
+        refreshList();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<head>
+  <meta name="author" content="vsldev, github.com/vsl-dev, vsldev.tk" />
+  <meta name="description" content="New url shortener" />
+  <meta name="keywords" content="url, shortener, url shortener" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css"
+  />
+  <link
+    href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css"
+    rel="stylesheet"
+  />
+  <script
+    src="https://kit.fontawesome.com/b198190252.js"
+    crossorigin="anonymous"
+  ></script>
+  <link
+    rel="stylesheet"
+    href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+  />
+  <link
+    href="https://unpkg.com/tailwindcss@^2.0/dist/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<nav class="flex flex-row w-full justify-between items-center p-3 fixed">
+  <div class="flex flex-row gap-12 text-green-300 pl-4">
+    <p class="hover:underline"><a href="/">Home</a></p>
+    <p class="hover:underline"><a href="">History</a></p>
+    <p class="hover:underline"><a href="/github" target="_blank">Github</a></p>
+  </div>
+  <div>
+  <% if(user) { %>
+    <a href="/logout">
+      <p class="text-black bg-green-300 p-2 px-4 rounded-lg">Logout</p>
+    </a>
+  <% } else { %>
+    <a href="/login">
+      <p class="text-black bg-green-300 p-2 px-4 rounded-lg">Login</p>
+    </a>
+  <% } %>
+  </div>
+</nav>
