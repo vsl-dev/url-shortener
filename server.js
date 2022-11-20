@@ -55,11 +55,10 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate(["google", "discord"], {
+  passport.authenticate("google", {
     failureRedirect: "/auth/failed",
   }),
   function (req, res) {
-    console.log(req.user);
     res.redirect("/");
   }
 );
@@ -75,7 +74,6 @@ app.get(
   "/auth/discord/callback",
   passport.authenticate("discord", { failureRedirect: "/auth/failed" }),
   function (req, res) {
-    console.log(req.user);
     res.redirect("/");
   }
 );

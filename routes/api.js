@@ -35,10 +35,15 @@ router.get("/mylinks", (req, res) => {
   const user = req.user;
   if (!user) return res.json({ code: 401, message: "Unauthorized" });
   try {
-    const data = Object.values(db.fetch("urls")).filter(
-      (x) => x.ownerId === user.id
-    );
-    if (data === null)
+    const a = db.fetch("urls");
+    if (a == null)
+      return res.json({
+        code: 404,
+        message: "No links found for this user",
+        data: [],
+      });
+    const data = Object.values(a).filter((x) => x.ownerId === user.id);
+    if (data == "")
       return res.json({
         code: 404,
         message: "No links found for this user",
@@ -50,6 +55,7 @@ router.get("/mylinks", (req, res) => {
       data: data,
     });
   } catch (err) {
+    console.log(err);
     res.json({ code: 500, message: "Internal server error" });
   }
 });
@@ -60,11 +66,14 @@ router.post("/short", limiter, (req, res) => {
   try {
     const url = req.body.url;
     const type = req.body.type;
-    const allUrls = Object.values(db.fetch("urls"));
+    const allUrls = db.fetch("urls");
     if (type === "random") {
-      var a = allUrls
-        .filter((a) => a.ownerId === req.user.id)
-        .find((b) => b.url === url);
+      var a =
+        allUrls == null
+          ? Object.values(allUrls)
+              .filter((a) => a.ownerId === user.id)
+              .find((b) => b.url === url)
+          : false;
       if (a)
         return res.json({
           code: 999,
@@ -72,7 +81,7 @@ router.post("/short", limiter, (req, res) => {
         });
       var newID;
       newID = makeid(20);
-      var b = allUrls.find((a) => a.id === newID);
+      var b = allUrls === null ? false : Object.values(allUrls).find((a) => a.id === newID);
       if (b) return (newID = makeid(20));
       var Data = {
         id: newID,
@@ -87,15 +96,19 @@ router.post("/short", limiter, (req, res) => {
       db.set(`urls.${newID}`, Data);
       res.json({ code: 200, message: "Success" });
     } else if (type === "custom") {
-      var a = allUrls
-        .filter((a) => a.ownerId === req.user.id)
-        .find((b) => b.url === url);
+      var a =
+        allUrls === null
+          ? false : Object.values(allUrls)
+              .filter((a) => a.ownerId === user.id)
+              .find((b) => b.url === url);
       if (a)
         return res.json({
           code: 999,
           message: "This url aleady added to system!",
         });
-      var b = allUrls.find((a) => a.id === req.body.customId);
+      var b =
+        allUrls === null
+          ? false : Object.values(allUrls).find((a) => a.id === req.body.customId);
       if (b) return res.json({ code: 999, message: "This id already in use" });
       var cid = req.body.customId.replaceAll(/[\W_]+/g, "");
       var Data = {
@@ -114,6 +127,8 @@ router.post("/short", limiter, (req, res) => {
       res.json({ code: 500, message: "Interval server error" });
     }
   } catch (err) {
+    console.log(err);
+    console.log(db.fetch("urls"));
     res.json({ code: 500, message: "Interval server error" });
   }
 });
