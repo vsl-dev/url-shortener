@@ -1,16 +1,53 @@
 {
-    "users": {},
-    "url": {},
     "urls": {
-        "discord": {
-            "id": "discord",
+        "XnlqTIOfkJKppccZa0fY": {
+            "id": "XnlqTIOfkJKppccZa0fY",
             "ownerId": "703636860764684339",
-            "url": "https://discord.com",
-            "type": 1,
-            "added": 1668975685641,
+            "url": "https://vsldev.tk",
+            "type": 0,
+            "added": 1669313760993,
+            "stats": {
+                "clicks": 0
+            }
+        },
+        "mq2NJKWzAsVmTJguWsiI": {
+            "id": "mq2NJKWzAsVmTJguWsiI",
+            "ownerId": "703636860764684339",
+            "url": "https://discord.coms",
+            "type": 0,
+            "added": 1669314438718,
+            "stats": {
+                "clicks": 0
+            }
+        },
+        "f3DorCFACSazZCXah3lH": {
+            "id": "f3DorCFACSazZCXah3lH",
+            "ownerId": "703636860764684339",
+            "url": "https://discord.comss",
+            "type": 0,
+            "added": 1669314449613,
+            "stats": {
+                "clicks": 0
+            }
+        },
+        "CR0bs9QcId6hebElKvcx": {
+            "id": "CR0bs9QcId6hebElKvcx",
+            "ownerId": "703636860764684339",
+            "url": "https://discord.come",
+            "type": 0,
+            "added": 1669314481229,
             "stats": {
                 "clicks": 0
             }
         }
-    }
+    },
+    "deletedUrls": [
+        {
+            "ownerId": "703636860764684339",
+            "url": "https://vsldev.tk",
+            "id": "SOynZtexfoP9dWnYdWgC",
+            "added": 1669313743111,
+            "deleted": 1669313750719
+        }
+    ]
 }

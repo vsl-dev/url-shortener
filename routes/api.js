@@ -66,14 +66,16 @@ router.post("/short", limiter, (req, res) => {
   try {
     const url = req.body.url;
     const type = req.body.type;
+    if (url.length <= 0)
+      return res.json({ code: 411, message: "Length required" });
     const allUrls = db.fetch("urls");
     if (type === "random") {
       var a =
         allUrls == null
-          ? Object.values(allUrls)
+          ? false
+          : Object.values(allUrls)
               .filter((a) => a.ownerId === user.id)
-              .find((b) => b.url === url)
-          : false;
+              .find((b) => b.url === url);
       if (a)
         return res.json({
           code: 999,
@@ -81,7 +83,10 @@ router.post("/short", limiter, (req, res) => {
         });
       var newID;
       newID = makeid(20);
-      var b = allUrls === null ? false : Object.values(allUrls).find((a) => a.id === newID);
+      var b =
+        allUrls === null
+          ? false
+          : Object.values(allUrls).find((a) => a.id === newID);
       if (b) return (newID = makeid(20));
       var Data = {
         id: newID,
@@ -98,7 +103,8 @@ router.post("/short", limiter, (req, res) => {
     } else if (type === "custom") {
       var a =
         allUrls === null
-          ? false : Object.values(allUrls)
+          ? false
+          : Object.values(allUrls)
               .filter((a) => a.ownerId === user.id)
               .find((b) => b.url === url);
       if (a)
@@ -108,7 +114,8 @@ router.post("/short", limiter, (req, res) => {
         });
       var b =
         allUrls === null
-          ? false : Object.values(allUrls).find((a) => a.id === req.body.customId);
+          ? false
+          : Object.values(allUrls).find((a) => a.id === req.body.customId);
       if (b) return res.json({ code: 999, message: "This id already in use" });
       var cid = req.body.customId.replaceAll(/[\W_]+/g, "");
       var Data = {

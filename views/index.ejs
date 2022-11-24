@@ -47,7 +47,7 @@
           </form>
         </div>
         <div>
-          <br>
+          <br />
           <h2 class="text-white p-2 text-xl">Your Links</h2>
           <div
             class="border-2 border-solid border-green-300 rounded-lg p-3"
@@ -56,7 +56,7 @@
             <center>
               <p
                 class="text-2xl text-white fa-solid fa-spinner fa-spin"
-                id="loading"
+                id="loader"
               ></p>
             </center>
           </div>
@@ -97,80 +97,113 @@
       const form = document.getElementById("form");
       const customId = document.getElementById("customId");
 
-      function refreshList() {
-        fetch("/api/mylinks", {
-          method: "GET",
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            var array = data.data;
-            if (array == "") {
-              document.getElementById("list").innerHTML = "";
-              const a = document.createElement("p");
-              const aText = document.createTextNode(
-                "You don't have any shortened links"
-              );
-              a.classList.add('text-white')
-              a.appendChild(aText);
+      deleteModal = (id) => {
+        swal({
+          title: "Confirm",
+          text: "Are you sure to delete this url?",
+          icon: "warning",
+          dangerMode: true,
+          buttons: ["Cancel", "Delete"],
+        }).then((willDelete) => {
+          if (willDelete) {
+            try {
+              fetch("/api/delete/" + id, {
+                method: "POST",
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  swal("Url deleted succesfully!", {
+                    icon: "success",
+                  });
+                  refreshList();
+                });
+            } catch (err) {
+              console.error(err);
+              swal("Error!", "An error occurred please try again!", "error");
+            }
+          }
+        });
+      };
 
-              const element = document.getElementById("list");
-              element.appendChild(a);
-            } else {
-              document.getElementById("list").innerHTML = "";
-              array.reverse().map((x) => {
-                const a = document.createElement("div");
-                const b = document.createElement("div");
-                const icon = document.createElement("div");
-                const trash = document.createElement("div");
-                const bText = document.createTextNode(x.url);
-                a.classList.add(
-                  "flex",
-                  "flex-row",
-                  "justify-between",
-                  "items-center",
-                  "text-green-300",
-                  "p-px",
-                  "gap-2",
-                  "mt-1"
+      refreshList = () => {
+        try {
+          fetch("/api/mylinks", {
+            method: "GET",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var array = data.data;
+              if (array == "") {
+                document.getElementById("list").innerHTML = "";
+                const a = document.createElement("p");
+                const aText = document.createTextNode(
+                  "You don't have any shortened links"
                 );
-                b.classList.add(
-                  "text-white",
-                  "border-2",
-                  "border-white",
-                  "p-1",
-                  "rounded",
-                  "w-full",
-                  "break-all"
-                );
-                icon.classList.add(
-                  "fa-solid",
-                  "fa-pen",
-                  "text-gray-800",
-                  "bg-white",
-                  "p-2.5",
-                  "rounded-lg",
-                  "cursor-pointer"
-                );
-                trash.classList.add(
-                  "fa-solid",
-                  "fa-trash",
-                  "text-gray-800",
-                  "bg-white",
-                  "p-2.5",
-                  "rounded-lg",
-                  "cursor-poiner"
-                );
-                a.appendChild(b);
-                a.appendChild(icon);
-                a.appendChild(trash);
-                b.appendChild(bText);
+                a.classList.add("text-white");
+                a.appendChild(aText);
 
                 const element = document.getElementById("list");
                 element.appendChild(a);
-              });
-            }
-          });
-      }
+              } else {
+                document.getElementById("list").innerHTML = "";
+                array.reverse().map((x) => {
+                  const a = document.createElement("div");
+                  const b = document.createElement("div");
+                  const icon = document.createElement("div");
+                  const trash = document.createElement("div");
+                  const bText = document.createTextNode(x.url);
+                  a.classList.add(
+                    "flex",
+                    "flex-row",
+                    "justify-between",
+                    "items-center",
+                    "text-green-300",
+                    "p-px",
+                    "gap-2",
+                    "mt-1"
+                  );
+                  b.classList.add(
+                    "text-white",
+                    "border-2",
+                    "border-white",
+                    "p-1",
+                    "rounded",
+                    "w-full",
+                    "break-all"
+                  );
+                  icon.classList.add(
+                    "fa-solid",
+                    "fa-pen",
+                    "text-gray-800",
+                    "bg-white",
+                    "p-2.5",
+                    "rounded-lg",
+                    "cursor-pointer"
+                  );
+                  trash.classList.add(
+                    "fa-solid",
+                    "fa-trash",
+                    "text-gray-800",
+                    "bg-white",
+                    "p-2.5",
+                    "rounded-lg",
+                    "cursor-pointer"
+                  );
+                  a.appendChild(b);
+                  a.appendChild(icon);
+                  a.appendChild(trash);
+                  b.appendChild(bText);
+                  trash.setAttribute("onclick", `deleteModal('${x.id}')`);
+
+                  const element = document.getElementById("list");
+                  element.appendChild(a);
+                });
+              }
+            });
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
       type.onchange = () => {
         customId.classList.toggle("hidden");
@@ -200,6 +233,14 @@
           .then((data) => {
             console.log(data);
             refreshList();
+            if (data.code === 999)
+              return swal("Error!", data.message ?? ">-<", "error");
+            if (data.code === 200)
+              return swal(
+                "Success!",
+                "Your url succesfuly shortened!",
+                "success"
+              );
           });
       });
 
