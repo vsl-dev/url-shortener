@@ -92,6 +92,22 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/info/:urlID", (req, res) => {
+  res.render("info", {
+    user: req.user,
+  });
+});
+
+app.get("/info", (req, res) => {
+  res.redirect("/");
+});
+
+app.get("/:urlID", (req, res) => {
+  const data = db.fetch("urls." + req.params.urlID);
+  if (data === null) return res.json({ code: 404, message: "Not found" });
+  res.redirect("/api/redirect/" + data.id);
+});
+
 app.use("/api", require("./routes/api"));
 
 // 404

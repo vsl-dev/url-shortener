@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('parts/head') %>
+  <body class="bg-gray-800">
+    <div onclick="urlInfo()">Sa</div>
+
+    <script>
+      const baseURL = "http://localhost:3500";
+
+      urlInfo = () => {
+        const url = new URL(window.location.href);
+        const pathname = url.pathname;
+
+        fetch(`/api/info/${pathname.replaceAll("/", " ").split(" ")[2]}`, {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+          });
+      };
+    </script>
+    <%- include('parts/footer') %>
+  </body>
+</html>

@@ -7,7 +7,7 @@
             "type": 0,
             "added": 1669313760993,
             "stats": {
-                "clicks": 0
+                "clicks": 1
             }
         },
         "mq2NJKWzAsVmTJguWsiI": {
@@ -27,17 +27,27 @@
             "type": 0,
             "added": 1669314449613,
             "stats": {
-                "clicks": 0
+                "clicks": 2
             }
         },
-        "CR0bs9QcId6hebElKvcx": {
-            "id": "CR0bs9QcId6hebElKvcx",
+        "a54321": {
+            "id": "a54321",
             "ownerId": "703636860764684339",
-            "url": "https://discord.come",
-            "type": 0,
-            "added": 1669314481229,
+            "url": "http://localhost:3500/a12345",
+            "type": 1,
+            "added": 1669399717638,
             "stats": {
-                "clicks": 0
+                "clicks": 116
+            }
+        },
+        "a12345": {
+            "id": "a12345",
+            "ownerId": "703636860764684339",
+            "url": "http://localhost:3500/a54321",
+            "type": 1,
+            "added": 1669399727118,
+            "stats": {
+                "clicks": 114
             }
         }
     },
@@ -48,6 +58,27 @@
             "id": "SOynZtexfoP9dWnYdWgC",
             "added": 1669313743111,
             "deleted": 1669313750719
+        },
+        {
+            "ownerId": "703636860764684339",
+            "url": "https://discord.come",
+            "id": "CR0bs9QcId6hebElKvcx",
+            "added": 1669314481229,
+            "deleted": 1669397870316
+        },
+        {
+            "ownerId": "703636860764684339",
+            "url": "http://localhost:3500/",
+            "id": "a12345",
+            "added": 1669399680721,
+            "deleted": 1669399703225
+        },
+        {
+            "ownerId": "703636860764684339",
+            "url": "https://discord.com",
+            "id": "sPr9i3tpMEFoBDVkQM4v",
+            "added": 1669399934881,
+            "deleted": 1669399940132
         }
     ]
 }

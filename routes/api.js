@@ -4,7 +4,7 @@ const router = express.Router();
 
 const db = global.db;
 
-const limiter = rateLimit({
+const apiLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 30, // max 30 requests
   standardHeaders: true,
@@ -19,17 +19,43 @@ const limiter = rateLimit({
   },
 });
 
-router.get("/", (req, res) => {
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minutes
+  max: 200, // max 200 requests
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req, res) => {
+    return req.clientIp;
+  },
+  message: {
+    code: 429,
+    message:
+      "Too many requests, you have been rate limited. Please try again later",
+  },
+});
+
+router.get("/", limiter, (req, res) => {
   res.status(200);
 });
 
-router.get("/redirect/:pathID", limiter, (req, res) => {
-  const pathID = req.params.pathID;
-  const data = db.fetch(`urls.${pathID}`);
-  if (data == null) return res.json({ code: 404, messag: "Not found" });
+router.get("/redirect/:urlID", limiter, (req, res) => {
+  const urlID = req.params.urlID;
+  const data = db.fetch(`urls.${urlID}`);
+  if (data === null) return res.json({ code: 404, messag: "Not found" });
   res.redirect(data.url);
-  db.add(`urls.${pathID}.stats.clicks`, 1);
+  db.add(`urls.${urlID}.stats.clicks`, 1);
 });
+
+router.get('/info/:urlID', limiter, (req, res) => {
+  const urlID = req.params.urlID
+  const data = db.fetch(`urls.${urlID}`)
+  if(data === null) return res.json({ code: 404, message: 'Not found' })
+  res.json({
+    code: 200,
+    message: 'Success',
+    data: data ?? []
+  })
+})
 
 router.get("/mylinks", (req, res) => {
   const user = req.user;
@@ -60,7 +86,7 @@ router.get("/mylinks", (req, res) => {
   }
 });
 
-router.post("/short", limiter, (req, res) => {
+router.post("/short", apiLimiter, (req, res) => {
   const user = req.user;
   if (!user) return res.json({ code: 401, message: "Unauthorized" });
   try {
@@ -140,7 +166,7 @@ router.post("/short", limiter, (req, res) => {
   }
 });
 
-router.post("/delete/:urlID", (req, res) => {
+router.post("/delete/:urlID", apiLimiter, (req, res) => {
   const user = req.user;
   const urlID = req.params.urlID;
   if (!user) return res.json({ code: 401, message: "Unauthorized" });
