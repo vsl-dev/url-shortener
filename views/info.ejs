@@ -2,24 +2,41 @@
 <html lang="en">
   <%- include('parts/head') %>
   <body class="bg-gray-800">
-    <div onclick="urlInfo()">Sa</div>
-
-    <script>
-      const baseURL = "http://localhost:3500";
-
-      urlInfo = () => {
-        const url = new URL(window.location.href);
-        const pathname = url.pathname;
-
-        fetch(`/api/info/${pathname.replaceAll("/", " ").split(" ")[2]}`, {
-          method: "GET",
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-          });
-      };
-    </script>
+    <div class="container">
+      <h1 class="text-2xl text-white px-10 py-3">
+        Url Info
+      </h1>
+      <div class="flex row text-white px-10 py-0.5 text-lg">
+        <p class="px-0.5">Url: </p>
+        <p class="break-all" loader="true" id="urlP"></p>
+      </div>
+      <div class="flex row text-white px-10 py-0.5 text-lg">
+        <p class="px-0.5">Redirect URL: </p>
+        <p class="break-all" loader="true" id="urlRedirect"></p>
+      </div>
+      <div class="flex row text-white px-10 py-0.5 text-lg">
+        <p class="px-0.5">ID: </p>
+        <p class="break-all" loader="true" id="urlID"></p>
+      </div>
+      <div class="flex row text-white px-10 py-0.5 text-lg items-center">
+        <p class="px-0.5">Added: </p>
+        <p loader="true" id="urlDate"></p>
+        <p class="text-sm text-gray-400 px-1" loader="true" id="urlDateB"></p>
+      </div>
+      <div class="flex row text-white px-10 py-0.5 text-lg">
+        <p class="px-0.5">Type: </p>
+        <p loader="true" id="urlType"></p>
+      </div>
+      <h1 class="text-2xl text-white px-10 py-3">
+        Stats
+      </h1>
+      <div class="flex row text-white px-10 py-0.5 text-lg items-center">
+        <p class="px-0.5">Clicks: </p>
+        <p loader="true" id="clicks"></p>
+        <p class="hidden text-sm text-gray-400 px-1" loader="true" id="clicksB"></p>
+      </div>
+    </div>
+    <script src="/js/info.js"></script>
     <%- include('parts/footer') %>
   </body>
 </html>
