@@ -4,15 +4,14 @@ const config = {
   creator: "https://github.com/vsl-dev",
   auth: {
     google: {
-      clientID:
-        "179898243453-v94bhcq0ic2i8460vc798itean4grhi5.apps.googleusercontent.com",
-      clientSecret: "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",
-      callbackURL: "http://localhost:3500/auth/google/callback",
+      clientID: "GOOGLE CLIENT ID",
+      clientSecret: "GOOGLE CLIENT SECRET",
+      callbackURL: "GOOGLE CALLBACK URL",
     },
     discord: {
-      clientID: "776536871287259146",
-      clientSecret: "lnmDJT-9yrxPxsI5cSqu8hTjMpA_-htg",
-      callbackURL: "http://localhost:3500/auth/discord/callback",
+      clientID: "DISCORD CLIENT ID",
+      clientSecret: "DISCORD CLIENT SECRET",
+      callbackURL: "DISCORD CALLBACK URL",
     },
   },
 };
