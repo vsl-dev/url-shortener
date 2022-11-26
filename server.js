@@ -102,6 +102,10 @@ app.get("/info", (req, res) => {
   res.redirect("/");
 });
 
+app.get('/github', (req, res) => {
+  res.redirect('https://github.com/vsl-dev')
+})
+
 app.get("/:urlID", (req, res) => {
   const data = db.fetch("urls." + req.params.urlID);
   if (data === null) return res.json({ code: 404, message: "Not found" });
