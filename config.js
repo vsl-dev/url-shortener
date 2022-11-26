@@ -11,7 +11,7 @@ const config = {
     },
     discord: {
       clientID: "776536871287259146",
-      clientSecret: "M2mE2uXV71kFLjTVXfp0G3g1-B-5omxK",
+      clientSecret: "lnmDJT-9yrxPxsI5cSqu8hTjMpA_-htg",
       callbackURL: "http://localhost:3500/auth/discord/callback",
     },
   },
