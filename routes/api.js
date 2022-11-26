@@ -46,16 +46,16 @@ router.get("/redirect/:urlID", limiter, (req, res) => {
   db.add(`urls.${urlID}.stats.clicks`, 1);
 });
 
-router.get('/info/:urlID', limiter, (req, res) => {
-  const urlID = req.params.urlID
-  const data = db.fetch(`urls.${urlID}`)
-  if(data === null) return res.json({ code: 404, message: 'Not found' })
+router.get("/info/:urlID", limiter, (req, res) => {
+  const urlID = req.params.urlID;
+  const data = db.fetch(`urls.${urlID}`);
+  if (data === null) return res.json({ code: 404, message: "Not found" });
   res.json({
     code: 200,
-    message: 'Success',
-    data: data ?? []
-  })
-})
+    message: "Success",
+    data: data ?? [],
+  });
+});
 
 router.get("/mylinks", (req, res) => {
   const user = req.user;
@@ -143,7 +143,7 @@ router.post("/short", apiLimiter, (req, res) => {
           ? false
           : Object.values(allUrls).find((a) => a.id === req.body.customId);
       if (b) return res.json({ code: 999, message: "This id already in use" });
-      var cid = req.body.customId.replaceAll(/[\W_]+/g, "");
+      var cid = req.body.customId.replaceAll(/[^A-z0-9 _ -]/g, "");
       var Data = {
         id: cid,
         ownerId: user.id,
