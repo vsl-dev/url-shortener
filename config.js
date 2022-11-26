@@ -1,5 +1,5 @@
 const config = {
-  version: 1.0,
+  version: 2.0,
   name: "Url Shortener",
   creator: "https://github.com/vsl-dev",
   auth: {
